@@ -46,29 +46,30 @@ $(".flyingShit").click(function (arg) {
 
 $("body").keydown(function (arg) {
     var $active = $("[data-active = true]");
+    var pos = $active.position();
     switch (arg.keyCode) {
         //MoveRight
         case arrows.right:
-            var currPos = $active.position().left;
-            var newPos = (currPos + step);
+            var currPos = pos.left;
+            var newPos = currPos + step;
             $active.css({ "left": newPos });
             break;
         //MoveLeft
         case arrows.left:
-            var currPos = $active.position().left;
-            var newPos = (currPos - step);
+            var currPos = pos.left;
+            var newPos = currPos - step;
             $active.css({ "left": newPos });
             break;
         //MoveUp
         case arrows.up:
-            var currPos = $active.position().top;
-            var newPos = (currPos - step);
+            var currPos = pos.top;
+            var newPos = currPos - step;
             $active.css({ "top": newPos });
             break;
         //MoveDown
         case arrows.down:
-            var currPos = $active.position().top;
-            var newPos = (currPos + step);
+            var currPos = pos.top;
+            var newPos = currPos + step;
             $active.css({ "top": newPos });
             break;
     }
