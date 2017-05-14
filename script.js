@@ -11,22 +11,27 @@ var arrows = {
     right: 39,
     down: 40,
 }
+
 var step = 10;
+
+var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
 
 for (var i = 0; i <= amountOfShit; i++) {
     $("<div/>")
         .addClass("divClass")
         .css("top", randomCoord())
         .css("left", randomCoord())
-        .text("Someshit" + i)
         .attr("data-active", "false")
         .appendTo($(".edgeBorder"));
+    $("<span/>")
+        .text("Someshit" + i)
+        .appendTo($("[data-active = false]").get(i));
 }
 //Adding arrow buttons
-var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
+
 for (var i = 0; i < buttons.length; i++) {
     $("<button/>")
-        .attr("id", "buttonRight")
+        .attr("data-buttonDirection", buttons[i])
         .addClass("buttonClass")
         .html(buttons[i])
         .appendTo($(".edgeBorder"));
@@ -39,42 +44,96 @@ $("<button/>")
     .appendTo($(".divClass"));
 //Shit activation
 $(".flyingShit").click(function (arg) {
-    alert("Button:" + event.target.parentElement.innerText + " is activated");
+    alert("Button:" + $(arg.target).parent().children("span").text() + " is activated");
     $(".divClass").removeAttr("data-active");
-    $(event.target.parentNode).attr("data-active", "true");
+    $(arg.target.parentNode).attr("data-active", "true");
 });
 
+// Move items on button press
 $("body").keydown(function (arg) {
-    var $active = $("[data-active = true]");
-    var pos = $active.position();
+    //var $active = $("[data-active = true]");
+    //var pos = $active.position();
     switch (arg.keyCode) {
         //MoveRight
         case arrows.right:
-            var currPos = pos.left;
-            var newPos = currPos + step;
-            $active.css({ "left": newPos });
+            moveRight();
             break;
         //MoveLeft
         case arrows.left:
-            var currPos = pos.left;
-            var newPos = currPos - step;
-            $active.css({ "left": newPos });
+            moveLeft();
             break;
         //MoveUp
         case arrows.up:
-            var currPos = pos.top;
-            var newPos = currPos - step;
-            $active.css({ "top": newPos });
+            moveUp();
             break;
         //MoveDown
         case arrows.down:
-            var currPos = pos.top;
-            var newPos = currPos + step;
-            $active.css({ "top": newPos });
+            moveDown();
+            break;
+    }
+});
+// Move items on clicks
+$(".buttonClass").click(function (arg){
+    switch ($("[data-buttonDirection]").attr("data-buttonDirection")){
+        //MoveRight
+        case "&rarr;":
+            moveRight();
+            break;
+        //MoveLeft
+        case "&larr;":
+            moveLeft();
+            break;
+        //MoveUp
+        case "&uarr;":
+            moveUp();
+            break;
+        //MoveDown
+        case "&darr;":
+            moveDown();
             break;
     }
 });
 
+function moveRight(arg) {
+    if ($("[data-active = true]").length == 0){
+        alert ("Click 'Activate' on any button")
+    } else {
+    var currPos = $("[data-active = true]").position().left;
+    var newPos = currPos + step;
+    $("[data-active = true]").css({ "left": newPos });
+    }
+}
+
+function moveLeft(arg) {
+    if ($("[data-active = true]").length == 0){
+        alert ("Click 'Activate' on any button")
+    } else {
+    var currPos = $("[data-active = true]").position().left;
+    var newPos = currPos - step;
+    $("[data-active = true]").css({ "left": newPos });
+    }
+}
+
+function moveUp(arg) {
+    if ($("[data-active = true]").length == 0){
+        alert ("Click 'Activate' on any button")
+    } else {
+    var currPos = $("[data-active = true]").position().top;
+    var newPos = currPos - step;
+    $("[data-active = true]").css({ "top": newPos });
+    }
+}
+
+function moveDown(arg) {
+    if ($("[data-active = true]").length == 0){
+        alert ("Click 'Activate' on any button")
+    } else {
+    var currPos = $("[data-active = true]").position().top;
+    var newPos = currPos + step;
+    $("[data-active = true]").css({ "top": newPos });
+    }
+}
+
 function randomCoord() {
     return (Math.random() / 2).toString().substring(2, 5) + "px";
-}
+};
