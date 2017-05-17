@@ -58,6 +58,7 @@ function createDivWithButtons() {
     $("<input/>")
         .attr("type", "checkbox")
         .attr("checked",false)
+        .attr("disabled",true)
         .addClass("checkBoxClass")
         .appendTo(createdLabel);
 }
@@ -154,22 +155,26 @@ function checkActiveElement() {
 function elementActivation(event) {
     $(event.target).parent().attr("data-active", "true");
     $(event.target).parent().css({ "box-shadow": "0 0 10px red" });
+    $(event.target).parent().find(".checkBoxClass").attr("disabled",false);
     $(".buttonClass").removeAttr("disabled");
 };
 
 function elementDeactivation(event) {
     $(".divClass").removeAttr("data-active");
     $(event.target).parent().css({ "box-shadow": "" });
+    $(event.target).parent().find(".checkBoxClass").attr("disabled",true);
     $(".buttonClass").attr("disabled", "");
 }
 
 function activateAll() {
     $(".divClass").attr("data-active", "true").css({ "box-shadow": "0 0 10px red" });
     $(".buttonClass").removeAttr("disabled");
+    $(".checkBoxClass").attr("disabled",false)
 }
 
 function deactivateAll() {
     $(".divClass").removeAttr("data-active");
     $(".divClass").css({ "box-shadow": "" });
     $(".buttonClass").attr("disabled", "");
+    $(".checkBoxClass").attr("disabled",true)
 }
