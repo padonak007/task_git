@@ -1,34 +1,35 @@
-//Adding frame
-$("<div/>")
-    .addClass("edgeBorder")
-    .appendTo($("body"));
-
-//Add div button
-$("<button/>")
-    .text("Add Div")
-    .appendTo($(".edgeBorder"))
-    .click(function (event) {
-        createDivWithButtons();
-    });
-
 //Adding random shit
 var amountOfShit = 3;
-var arrows = {
+var arrowCodes = {
     left: 37,
     up: 38,
     right: 39,
     down: 40,
 }
-
 var step = 10;
 
 var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
+
+//Add div button
+$("<button/>")
+    .text("Add Div")
+    .appendTo($(".controlPanelClass"))
+    .click(createDivWithButtons);
+
+$("<button/>")
+    .text("Activate all")
+    .appendTo($(".controlPanelClass"))
+    .click(activateAll);
+
+$("<button/>")
+    .text("Deactivate all")
+    .appendTo($(".controlPanelClass"))
+    .click(deactivateAll);
 
 for (var i = 0; i <= amountOfShit; i++) {
     createDivWithButtons();
 }
 
-$(".buttonClass").appendTo($(".edgeBorder"));
 //Adding activation button
 
 function createDivWithButtons() {
@@ -40,58 +41,57 @@ function createDivWithButtons() {
         .appendTo($(".edgeBorder"))
     $("<span/>")
         .text("Someshit")
-        .appendTo($(createdDiv));
+        .appendTo(createdDiv);
     $("<button/>")
         .text("Activate")
         .addClass("flyingShit")
-        .appendTo($(createdDiv))
-        .click(function (event) {
-            $(".divClass").removeAttr("data-active");
-            $(event.target).parent().attr("data-active", "true");
-            $(event.target).parent().css({ "box-shadow": "0 0 10px red" })
-            $(".buttonClass").removeAttr("disabled");
-        });
+        .appendTo(createdDiv)
+        .click(elementActivation);
     $("<button/>")
         .text("Deactivate")
         .addClass("flyingShit")
-        .appendTo($(createdDiv))
-        .click(function (event) {
-            $(".divClass").removeAttr("data-active");
-            $(event.target).parent().css({ "box-shadow": "" });
-            $(".buttonClass").attr("disabled","");
-        });
+        .appendTo(createdDiv)
+        .click(elementDeactivation);
+    var createdLabel = $("<label/>")
+        .text("Delay")
+            .appendTo(createdDiv);
+    $("<input/>")
+        .attr("type", "checkbox")
+        .attr("checked",false)
+        .addClass("checkBoxClass")
+        .appendTo(createdLabel);
 }
 
 // Move items on button press
-$("body").keydown(function (arg) {
+$("body").keydown(function (event) {
     if (checkActiveElement()) {
-        switch (arg.keyCode) {
+        switch (event.keyCode) {
             //MoveRight
-            case arrows.right:
-                moveRight();
+            case arrowCodes.right:
+                moveRight(event);
                 break;
             //MoveLeft
-            case arrows.left:
+            case arrowCodes.left:
                 moveLeft();
                 break;
             //MoveUp
-            case arrows.up:
+            case arrowCodes.up:
                 moveUp();
                 break;
             //MoveDown
-            case arrows.down:
+            case arrowCodes.down:
                 moveDown();
                 break;
         }
     }
 });
 // Move items on clicks
-$(".buttonClass").click(function (arg) {
+$(".buttonClass").click(function (event) {
     if (checkActiveElement()) {
-        switch ($(arg.target).attr("data-buttonDirection")) {
+        switch ($(event.target).attr("data-buttonDirection")) {
             //MoveRight
             case "&rarr;":
-                moveRight();
+                moveRight(event);
                 break;
             //MoveLeft
             case "&larr;":
@@ -109,10 +109,10 @@ $(".buttonClass").click(function (arg) {
     }
 });
 
-function moveRight(arg) {
-    var currPos = $("[data-active = true]").position().left;
+function moveRight(event) {
+    var currPos = $(event.target).parent().position().left;
     var newPos = currPos + step;
-    $("[data-active = true]").css({ "left": newPos });
+    $(event.target).parent().css({ "left": newPos });
 }
 
 function moveLeft(arg) {
@@ -139,6 +139,7 @@ function randomCoord() {
 };
 
 //Check for active element
+//$(event.target).parent().find(".checkBoxClass").is(":checked")
 
 function checkActiveElement() {
     var elementExists = $("[data-active = true]").length != 0;
@@ -151,7 +152,24 @@ function checkActiveElement() {
 }
 
 function elementActivation(event) {
-    alert("Button:" + $(event.target).parent().children("span").text() + " is activated");
-    $(".divClass").removeAttr("data-active");
-    $(event.target.parentNode).attr("data-active", "true");
+    $(event.target).parent().attr("data-active", "true");
+    $(event.target).parent().css({ "box-shadow": "0 0 10px red" });
+    $(".buttonClass").removeAttr("disabled");
 };
+
+function elementDeactivation(event) {
+    $(".divClass").removeAttr("data-active");
+    $(event.target).parent().css({ "box-shadow": "" });
+    $(".buttonClass").attr("disabled", "");
+}
+
+function activateAll() {
+    $(".divClass").attr("data-active", "true").css({ "box-shadow": "0 0 10px red" });
+    $(".buttonClass").removeAttr("disabled");
+}
+
+function deactivateAll() {
+    $(".divClass").removeAttr("data-active");
+    $(".divClass").css({ "box-shadow": "" });
+    $(".buttonClass").attr("disabled", "");
+}

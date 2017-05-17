@@ -7,7 +7,7 @@
     <!Task2>
     <style>
         .divClass {
-            height: 63px;
+            height: 82px;
             width: 79px;
             position: absolute;
             border-style: solid;
@@ -33,14 +33,31 @@
             background-color: #e7e7e7;
         }
 
+        .controlPanelClass {
+            height: 55px;
+            width: 700px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: darkslateblue;
+        }
+
+        .checkBoxClass {
+            
+        }
+
         .flyingShit {}
     </style>
 </head>
+
 <body>
-<button data-buttondirection="&amp;rarr;" class="buttonClass" disabled>→</button>
-<button data-buttondirection="&amp;larr;" class="buttonClass" disabled>←</button>
-<button data-buttondirection="&amp;uarr;" class="buttonClass" disabled>↑</button>
-<button data-buttondirection="&amp;darr;" class="buttonClass" disabled>↓</button>
+    <div class="edgeBorder">
+    </div>
+    <div class="controlPanelClass">
+        <button data-buttondirection="&amp;rarr;" class="buttonClass" disabled>→</button>
+        <button data-buttondirection="&amp;larr;" class="buttonClass" disabled>←</button>
+        <button data-buttondirection="&amp;uarr;" class="buttonClass" disabled>↑</button>
+        <button data-buttondirection="&amp;darr;" class="buttonClass" disabled>↓</button>
+    </div>
     <script src="script.js"></script>
 </body>
 
