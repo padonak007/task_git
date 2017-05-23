@@ -10,32 +10,41 @@ var arrowCodes = {
 };
 
 var buttonCodes = {
-    left:"&larr;",
-    up:"&uarr;",
-    right:"&rarr;",
-    down:"&darr;",
+    left: "&larr;",
+    up: "&uarr;",
+    right: "&rarr;",
+    down: "&darr;",
 };
 
 var direction = {
     up: {
-        sign:"-",
-        position:"top",
+        sign: "-",
+        position: "top",
     },
     down: {
-        sign:"+",
-        position:"top",
+        sign: "+",
+        position: "top",
     },
-    left:{
-        sign:"-",
-        position:"left",
+    left: {
+        sign: "-",
+        position: "left",
     },
-    right:{
-        sign:"+",
-        position:"left",
+    right: {
+        sign: "+",
+        position: "left",
     }
 }
 
-//var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
+//Input validation
+$("#id1").change(function () {
+    var a = Number($("#id1").val().toString());
+    if (a <= 100 && a > 0) {
+        step = a;
+        $("#id1").css({ "box-shadow": "" });
+    } else {
+        $("#id1").css({ "box-shadow": "0 0 10px red" });
+    }
+});
 
 //Add div button
 $("<button/>")
@@ -119,12 +128,7 @@ $(".buttonClass").click(function (event) {
         switch ($(event.target).attr("data-buttonDirection")) {
             //MoveRight
             case buttonCodes.right:
-                if (checkDelay()) {
-                    setTimeout(moveRight, delay);
-                } else {
-                   move(direction.right);
-                }
-
+                move(direction.right);
                 break;
             //MoveLeft
             case buttonCodes.left:
@@ -141,31 +145,31 @@ $(".buttonClass").click(function (event) {
         }
     }
 });
-//$($("[data-active = true]").get(i)).position().left;
 
 function randomCoord() {
     return (Math.random() / 2).toString().substring(2, 5) + "px";
 };
 
-function move (d){
-        var i = 0, div = $("[data-active = true]");;
+function move(d) {
+    var i = 0, div = $("[data-active = true]");
     for (i; i < div.length; i++) {
         var currPos = $(div.get(i)).position();
         currPos = currPos[d.position];
-        var newPos = currPos + Number(d.sign+step);
-        $(div.get(i)).css(d.position,newPos);
+        var newPos = currPos + Number(d.sign + step);
+        if (checkDelay()) {
+            setTimeout(function () { $(div.get(i)).css(d.position, newPos); }, delay);
+        } else {
+            $(div.get(i)).css(d.position, newPos);
+        }
     }
 }
 
-//Check for active element
-//$(event.target).parent().find(".checkBoxClass").is(":checked")
 
 function checkActiveElement() {
     var elementExists = $("[data-active = true]") != 0;
     if (elementExists) {
         return true;
     }
-    //alert("Click 'Activate' on any button");
     return false;
 
 }
@@ -220,3 +224,8 @@ function deactivateAll() {
 function checkDelay() {
     return $("[data-active = true]").find(".checkBoxClass").is(":checked");
 }
+
+//$($("[data-active = true]").get(i)).position().left;
+
+//Check for active element
+//$(event.target).parent().find(".checkBoxClass").is(":checked")
