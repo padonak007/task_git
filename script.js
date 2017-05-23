@@ -7,9 +7,35 @@ var arrowCodes = {
     up: 38,
     right: 39,
     down: 40,
+};
+
+var buttonCodes = {
+    left:"&larr;",
+    up:"&uarr;",
+    right:"&rarr;",
+    down:"&darr;",
+};
+
+var direction = {
+    up: {
+        sign:"-",
+        position:"top",
+    },
+    down: {
+        sign:"+",
+        position:"top",
+    },
+    left:{
+        sign:"-",
+        position:"left",
+    },
+    right:{
+        sign:"+",
+        position:"left",
+    }
 }
 
-var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
+//var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
 
 //Add div button
 $("<button/>")
@@ -70,19 +96,19 @@ $("body").keydown(function (event) {
         switch (event.keyCode) {
             //MoveRight
             case arrowCodes.right:
-                moveRight();
+                move(direction.right);
                 break;
             //MoveLeft
             case arrowCodes.left:
-                moveLeft();
+                move(direction.left);
                 break;
             //MoveUp
             case arrowCodes.up:
-                moveUp();
+                move(direction.up);
                 break;
             //MoveDown
             case arrowCodes.down:
-                moveDown();
+                move(direction.down);
                 break;
         }
     }
@@ -92,70 +118,44 @@ $(".buttonClass").click(function (event) {
     if (checkActiveElement()) {
         switch ($(event.target).attr("data-buttonDirection")) {
             //MoveRight
-            case "&rarr;":
+            case buttonCodes.right:
                 if (checkDelay()) {
                     setTimeout(moveRight, delay);
                 } else {
-                    moveRight();
+                   move(direction.right);
                 }
 
                 break;
             //MoveLeft
-            case "&larr;":
-                moveLeft();
+            case buttonCodes.left:
+                move(direction.left);
                 break;
             //MoveUp
-            case "&uarr;":
-                moveUp();
+            case buttonCodes.up:
+                move(direction.up);
                 break;
             //MoveDown
-            case "&darr;":
-                moveDown();
+            case buttonCodes.down:
+                move(direction.down);
                 break;
         }
     }
 });
 //$($("[data-active = true]").get(i)).position().left;
 
-function moveRight(event) {
-    var i = 0, div = $("[data-active = true]");
-    for (i; i < div.length; i++) {
-        var currPos = $(div.get(i)).position().left;
-        var newPos = currPos + step;
-        $(div.get(i)).css({ "left": newPos });
-    }
-}
-
-function moveLeft(event) {
-    var i = 0, div = $("[data-active = true]");;
-    for (i; i < div.length; i++) {
-        var currPos = $(div.get(i)).position().left;
-        var newPos = currPos - step;
-        $(div.get(i)).css({ "left": newPos });
-    }
-}
-
-function moveUp(event) {
-    var i = 0, div = $("[data-active = true]");
-    for (i; i < div.length; i++) {
-        var currPos = $(div.get(i)).position().top;
-        var newPos = currPos - step;
-        $(div.get(i)).css({ "top": newPos });
-    }
-}
-
-function moveDown(event) {
-    var i = 0, div = $("[data-active = true]");;
-    for (i; i < div.length; i++) {
-        var currPos = $(div.get(i)).position().top;
-        var newPos = currPos + step;
-        $(div.get(i)).css({ "top": newPos });
-    }
-}
-
 function randomCoord() {
     return (Math.random() / 2).toString().substring(2, 5) + "px";
 };
+
+function move (d){
+        var i = 0, div = $("[data-active = true]");;
+    for (i; i < div.length; i++) {
+        var currPos = $(div.get(i)).position();
+        currPos = currPos[d.position];
+        var newPos = currPos + Number(d.sign+step);
+        $(div.get(i)).css(d.position,newPos);
+    }
+}
 
 //Check for active element
 //$(event.target).parent().find(".checkBoxClass").is(":checked")
