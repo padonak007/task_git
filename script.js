@@ -1,12 +1,13 @@
 //Adding random shit
-var amountOfShit = 3;
+var amountOfShit = 3,
+    step = 10,
+    delay = 500;
 var arrowCodes = {
     left: 37,
     up: 38,
     right: 39,
     down: 40,
 }
-var step = 10;
 
 var buttons = ["&rarr;", "&larr;", "&uarr;", "&darr;"];
 
@@ -54,11 +55,11 @@ function createDivWithButtons() {
         .click(elementDeactivation);
     var createdLabel = $("<label/>")
         .text("Delay")
-            .appendTo(createdDiv);
+        .appendTo(createdDiv);
     $("<input/>")
         .attr("type", "checkbox")
-        .attr("checked",false)
-        .attr("disabled",true)
+        .attr("checked", false)
+        .attr("disabled", true)
         .addClass("checkBoxClass")
         .appendTo(createdLabel);
 }
@@ -69,7 +70,7 @@ $("body").keydown(function (event) {
         switch (event.keyCode) {
             //MoveRight
             case arrowCodes.right:
-                moveRight(event);
+                moveRight();
                 break;
             //MoveLeft
             case arrowCodes.left:
@@ -92,7 +93,12 @@ $(".buttonClass").click(function (event) {
         switch ($(event.target).attr("data-buttonDirection")) {
             //MoveRight
             case "&rarr;":
-                moveRight(event);
+                if (checkDelay()) {
+                    setTimeout(moveRight, delay);
+                } else {
+                    moveRight();
+                }
+
                 break;
             //MoveLeft
             case "&larr;":
@@ -109,30 +115,42 @@ $(".buttonClass").click(function (event) {
         }
     }
 });
+//$($("[data-active = true]").get(i)).position().left;
 
 function moveRight(event) {
-    var currPos = $(event.target).parent().position().left;
-    var newPos = currPos + step;
-    $(event.target).parent().css({ "left": newPos });
+    var i = 0, div = $("[data-active = true]");
+    for (i; i < div.length; i++) {
+        var currPos = $(div.get(i)).position().left;
+        var newPos = currPos + step;
+        $(div.get(i)).css({ "left": newPos });
+    }
 }
 
-function moveLeft(arg) {
-    var currPos = $("[data-active = true]").position().left;
-    var newPos = currPos - step;
-    $("[data-active = true]").css({ "left": newPos });
+function moveLeft(event) {
+    var i = 0, div = $("[data-active = true]");;
+    for (i; i < div.length; i++) {
+        var currPos = $(div.get(i)).position().left;
+        var newPos = currPos - step;
+        $(div.get(i)).css({ "left": newPos });
+    }
 }
 
-function moveUp(arg) {
-    var currPos = $("[data-active = true]").position().top;
-    var newPos = currPos - step;
-    $("[data-active = true]").css({ "top": newPos });
-
+function moveUp(event) {
+    var i = 0, div = $("[data-active = true]");
+    for (i; i < div.length; i++) {
+        var currPos = $(div.get(i)).position().top;
+        var newPos = currPos - step;
+        $(div.get(i)).css({ "top": newPos });
+    }
 }
 
-function moveDown(arg) {
-    var currPos = $("[data-active = true]").position().top;
-    var newPos = currPos + step;
-    $("[data-active = true]").css({ "top": newPos });
+function moveDown(event) {
+    var i = 0, div = $("[data-active = true]");;
+    for (i; i < div.length; i++) {
+        var currPos = $(div.get(i)).position().top;
+        var newPos = currPos + step;
+        $(div.get(i)).css({ "top": newPos });
+    }
 }
 
 function randomCoord() {
@@ -143,7 +161,7 @@ function randomCoord() {
 //$(event.target).parent().find(".checkBoxClass").is(":checked")
 
 function checkActiveElement() {
-    var elementExists = $("[data-active = true]").length != 0;
+    var elementExists = $("[data-active = true]") != 0;
     if (elementExists) {
         return true;
     }
@@ -153,28 +171,52 @@ function checkActiveElement() {
 }
 
 function elementActivation(event) {
-    $(event.target).parent().attr("data-active", "true");
-    $(event.target).parent().css({ "box-shadow": "0 0 10px red" });
-    $(event.target).parent().find(".checkBoxClass").attr("disabled",false);
-    $(".buttonClass").removeAttr("disabled");
+    $(event.target)
+        .parent()
+        .attr("data-active", "true");
+    $(event.target)
+        .parent()
+        .css({ "box-shadow": "0 0 10px red" });
+    $(event.target)
+        .parent()
+        .find(".checkBoxClass")
+        .attr("disabled", false);
+    $(".buttonClass")
+        .removeAttr("disabled");
 };
 
 function elementDeactivation(event) {
-    $(".divClass").removeAttr("data-active");
-    $(event.target).parent().css({ "box-shadow": "" });
-    $(event.target).parent().find(".checkBoxClass").attr("disabled",true);
-    $(".buttonClass").attr("disabled", "");
+    $(event.target)
+        .parent()
+        .removeAttr("data-active");
+    $(event.target)
+        .parent()
+        .css({ "box-shadow": "" });
+    $(event.target)
+        .parent()
+        .find(".checkBoxClass")
+        .attr("disabled", true);
+    $(".buttonClass")
+        .attr("disabled", "");
 }
 
 function activateAll() {
-    $(".divClass").attr("data-active", "true").css({ "box-shadow": "0 0 10px red" });
-    $(".buttonClass").removeAttr("disabled");
-    $(".checkBoxClass").attr("disabled",false)
+    $(".divClass")
+        .attr("data-active", "true")
+        .css({ "box-shadow": "0 0 10px red" });
+    $(".buttonClass")
+        .removeAttr("disabled");
+    $(".checkBoxClass")
+        .attr("disabled", false)
 }
 
 function deactivateAll() {
     $(".divClass").removeAttr("data-active");
     $(".divClass").css({ "box-shadow": "" });
     $(".buttonClass").attr("disabled", "");
-    $(".checkBoxClass").attr("disabled",true)
+    $(".checkBoxClass").attr("disabled", true)
+}
+
+function checkDelay() {
+    return $("[data-active = true]").find(".checkBoxClass").is(":checked");
 }
