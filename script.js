@@ -165,7 +165,7 @@ function moveDiv (i,d, div) {
         var newPos = currPos + Number(d.sign + step);
         if (checkDelay()) {
             setTimeout(function () {
-                $(div.get(0)).css(d.position, newPos);
+                $(div.get(i)).css(d.position, newPos);
             }, delay);
         } else {
             $(div.get(i)).css(d.position, newPos);
