@@ -35,34 +35,25 @@ var direction = {
     }
 };
 
+var id1 = $("#id1");
+
 //Input validation
-$("#id1").change(function () {
-    var a = Number($("#id1").val().toString());
+id1.change(function () {
+    var a = Number(id1.val());
     if (a <= 100 && a > 0) {
         step = a;
-        $("#id1").css({ "box-shadow": "" });
+        id1.css({ "box-shadow": "" });
     } else {
-        $("#id1").css({ "box-shadow": "0 0 10px red" });
+        id1.css({ "box-shadow": "0 0 10px red" });
     }
 });
 
-$("id1").val(step);
+id1.val(step);
 
-//Add div button
-$("<button/>")
-    .text("Add Div")
-    .appendTo($(".controlPanelClass"))
-    .click(createDivWithButtons);
-
-$("<button/>")
-    .text("Activate all")
-    .appendTo($(".controlPanelClass"))
-    .click(activateAll);
-
-$("<button/>")
-    .text("Deactivate all")
-    .appendTo($(".controlPanelClass"))
-    .click(deactivateAll);
+//Linking clicks to buttons
+$("#buttonAddDiv").click(createDivWithButtons);
+$("#buttonActivateAll").click(activateAll);
+$("#buttonDeactivateAll").click(deactivateAll);
 
 for (var i = 0; i <= amountOfShit; i++) {
     createDivWithButtons();
@@ -155,26 +146,27 @@ function randomCoord() {
 function move(d) {
     var i = 0, div = $("[data-active = true]");
     for (i; i < div.length; i++) {
-        moveDiv (i,d,div);
+        var currentDiv = $(div.get(i));
+        moveDiv(i, d, div, currentDiv);
     }
 }
 
-function moveDiv (i,d, div) {
-        var currPos = $(div.get(i)).position();
-        currPos = currPos[d.position];
-        var newPos = currPos + Number(d.sign + step);
-        if (checkDelay()) {
-            setTimeout(function () {
-                $(div.get(i)).css(d.position, newPos);
-            }, delay);
-        } else {
-            $(div.get(i)).css(d.position, newPos);
-        }
+function moveDiv(i, d, div, currentDiv) {
+    var currPos = currentDiv.position();
+    currPos = currPos[d.position];
+    var newPos = currPos + Number(d.sign + step);
+    if (checkDelay()) {
+        setTimeout(function () {
+            currentDiv.css(d.position, newPos);
+        }, delay);
+    } else {
+        currentDiv.css(d.position, newPos);
+    }
 }
 
 
 function checkActiveElement() {
-    var elementExists = $("[data-active = true]") != 0;
+    var elementExists = $("[data-active = true]").length != 0;
     if (elementExists) {
         return true;
     }
@@ -223,8 +215,9 @@ function activateAll() {
 }
 
 function deactivateAll() {
-    $(".divClass").removeAttr("data-active");
-    $(".divClass").css({ "box-shadow": "" });
+    divClass = $(".divClass");
+    divClass.removeAttr("data-active");
+    divClass.css({ "box-shadow": "" });
     $(".buttonClass").attr("disabled", "");
     $(".checkBoxClass").attr("disabled", true)
 }
