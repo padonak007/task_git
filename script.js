@@ -33,7 +33,7 @@ var direction = {
         sign: "+",
         position: "left",
     }
-}
+};
 
 //Input validation
 $("#id1").change(function () {
@@ -45,6 +45,8 @@ $("#id1").change(function () {
         $("#id1").css({ "box-shadow": "0 0 10px red" });
     }
 });
+
+$("id1").val(step);
 
 //Add div button
 $("<button/>")
@@ -148,20 +150,26 @@ $(".buttonClass").click(function (event) {
 
 function randomCoord() {
     return (Math.random() / 2).toString().substring(2, 5) + "px";
-};
+}
 
 function move(d) {
     var i = 0, div = $("[data-active = true]");
     for (i; i < div.length; i++) {
+        moveDiv (i,d,div);
+    }
+}
+
+function moveDiv (i,d, div) {
         var currPos = $(div.get(i)).position();
         currPos = currPos[d.position];
         var newPos = currPos + Number(d.sign + step);
         if (checkDelay()) {
-            setTimeout(function () { $(div.get(i)).css(d.position, newPos); }, delay);
+            setTimeout(function () {
+                $(div.get(0)).css(d.position, newPos);
+            }, delay);
         } else {
             $(div.get(i)).css(d.position, newPos);
         }
-    }
 }
 
 
@@ -187,7 +195,7 @@ function elementActivation(event) {
         .attr("disabled", false);
     $(".buttonClass")
         .removeAttr("disabled");
-};
+}
 
 function elementDeactivation(event) {
     $(event.target)
